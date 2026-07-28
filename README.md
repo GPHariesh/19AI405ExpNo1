@@ -1,115 +1,116 @@
-<h1>ExpNo 1 :Developing AI Agent with PEAS Description</h1>
-<h3>Name: G  P HARIESH</h3>
-<h3>Register Number:212224040100</h3>
+## ExpNo 1 :Developing AI Agent with PEAS Description<
+## NAME : G P HARIESH
+## Register number: 212224040100
+## AIM
+
+To find the PEAS description for the given AI problem and develop an AI agent.
 
 
-<h3>AIM:</h3>
-<br>
-<p>To find the PEAS description for the given AI problem and develop an AI agent.</p>
-<br>
-<h3>Theory</h3>
-<h3>Medicine prescribing agent:</h3>
-<p>Such this agent prescribes medicine for fever (greater than 98.5 degrees) which we consider here as unhealthy, by the user temperature input, and another environment is rooms in the hospital (two rooms). This agent has to consider two factors one is room location and an unhealthy patient in a random room, the agent has to move from one room to another to check and treat the unhealthy person. The performance of the agent is calculated by incrementing performance and each time after treating in one room again it has to check another room so that the movement causes the agent to reduce its performance. Hence, agents prescribe medicine to unhealthy.</p>
-<hr>
-<h3>PEAS DESCRIPTION:</h3>
-<table>
-  <tr>
-    <td><strong>Agent Type</strong></td>
-    <td><strong>Performance</strong></td>
-     <td><strong>Environment</strong></td>
-    <td><strong>Actuators</strong></td>
-    <td><strong>Sensors</strong></td>
-  </tr>
-    <tr>
-    <td><strong>Medicine prescribing agent</strong></td>
-    <td><strong>Treating unhealthy, agent movement</strong></td>
-     <td><strong>Rooms, Patient</strong></td>
-    <td><strong>Medicine, Treatment</strong></td>
-    <td><strong>Location, Temperature of patient</strong></td>
-  </tr>
-</table>
-<hr>
-<H3>DESIGN STEPS</H3>
-<h3>STEP 1:Identifying the input:</h3>
-<p>Temperature from patients, Location.</p>
-<h3>STEP 2:Identifying the output:</h3>
-<p>Prescribe medicine if the patient in a random has a fever.</p>
-<h3>STEP 3:Developing the PEAS description:</h3>
-<p>PEAS description is developed by the performance, environment, actuators, and sensors in an agent.</p>
-<h3>STEP 4:Implementing the AI agent:</h3>
-<p>Treat unhealthy patients in each room. And check for the unhealthy patients in random room</p>
-<h3>STEP 5:</h3>
-<p>Measure the performance parameters: For each treatment performance incremented, for each movement performance decremented</p>
+## THEORY
 
-<h3>PROGRAM</h3>
+The AI Exam Invigilator Agent monitors students during an examination to ensure a fair and malpractice-free environment. The agent observes students using sensors such as cameras and detects suspicious activities like using a mobile phone, talking to others, or repeatedly looking away from the answer sheet. Whenever suspicious behavior is detected, the agent alerts the invigilator and records the incident. The performance of the agent increases when it correctly detects suspicious activities and decreases when it has to monitor multiple students continuously. Thus, the agent helps maintain discipline and integrity during examinations.
+
+## DESIGN STEPS:
+STEP 1: Identifying the input:
+Student activities such as mobile phone usage, talking, and looking away during the examination.
+
+STEP 2: Identifying the output:
+Generate a warning or alert if suspicious behaviour is detected; otherwise continue monitoring the students.
+
+STEP 3: Developing the PEAS description:
+Develop the PEAS description by identifying the Performance measure, Environment, Actuators, and Sensors of the AI Exam Invigilator Agent.
+
+STEP 4: Implementing the AI agent:
+The agent continuously monitors students, detects suspicious activities, alerts the invigilator, and records incidents whenever malpractice is detected.
+
+STEP 5: Measuring the performance parameters:
+The performance of the agent is increased for every correctly detected suspicious activity and decreased for continuous monitoring or movement between students.
+
+## PEAS DESCRIPTION:
+
+
+
+| Agent Type | Performance | Environment | Actuators | Sensors |
+|------------|-------------|-------------|-----------|----------|
+| AI Exam Invigilator Agent | Detect suspicious activities, Monitor students, Maintain fair examination | Examination Hall, Students | Display Warning, Alert Invigilator, Record Incident | Camera, Mobile Phone Detection, Talking Detection, Eye Movement |
+
+
+## PROGRAM:
 ```
 import random
-import time
 
-room_A = (0, 0)
-room_B = (1, 0)
+class ExamInvigilatorAgent:
+    def __init__(self, exam_data):
+        self.exam_data = exam_data
+
+    def monitor_exam(self):
+        while True:
+            current_exam_state = self.sensors.get_exam_state()
+
+            print("\nCurrent Student Status")
+            print(current_exam_state)
+
+            action = self.choose_action(current_exam_state)
+
+            self.actuators.perform_action(action)
+
+            if action == "Student behavior is normal":
+                break
+
+    def choose_action(self, current_exam_state):
+
+        if current_exam_state['phone_detected']:
+            return "Alert: Mobile phone detected"
+
+        elif current_exam_state['talking']:
+            return "Warning: Student is talking"
+
+        elif current_exam_state['looking_away']:
+            return "Warning: Student is looking away frequently"
+
+        else:
+            return "Student behavior is normal"
 
 
-class Agent:
-    def _init_(self, program):
-        self.alive = True
-        self.performance = 0
-        self.program = program
-        self.location = random.choice([room_A, room_B])
+class ExamSensors:
 
+    def get_exam_state(self):
 
-def doctor_program(percept):
-    location, status = percept
-    if status == "unhealthy":
-        return "treat"
-    return "Right" if location == room_A else "Left"
-
-class DoctorEnvironment:
-    def _init_(self):
-        self.status = {
-            room_A: random.choice(["healthy", "unhealthy"]),
-            room_B: random.choice(["healthy", "unhealthy"]),
+        return {
+            'phone_detected': random.choice([True, False]),
+            'talking': random.choice([True, False]),
+            'looking_away': random.choice([True, False])
         }
-        self.agent = Agent(doctor_program)
 
-    def percept(self):
-        return self.agent.location, self.status[self.agent.location]
 
-    def execute_action(self, action):
-        loc = self.agent.location
-        if action == "Right":
-            self.agent.location = room_B
-            self.agent.performance -= 1
-        elif action == "Left":
-            self.agent.location = room_A
-            self.agent.performance -= 1
-        elif action == "treat":
-            temp = float(input(f"Enter temperature for patient in {loc}: "))
-            if temp > 98.5:
-                print("Prescribed: Paracetamol and antibiotic.")
-                self.agent.performance += 10
-            else:
-                print("No medicine needed.")
-            self.status[loc] = "healthy"
+class ExamActuators:
 
-    def run(self, steps=2):
-        for i in range(steps):
-            print(f"\nStep {i+1}")
-            percept = self.percept()
-            action = self.agent.program(percept)
-            self.execute_action(action)
-            print(f"Room Status: {self.status}")
-            print(f"Agent Location: {self.agent.location}")
-            print(f"Performance: {self.agent.performance}")
-            time.sleep(1)
-env = DoctorEnvironment()
-print("Initial Room Status:", env.status)
-print("Starting Location:", env.agent.location)
-env.run()
+    def perform_action(self, action):
+        print("Action:", action)
+
+
+if __name__ == "__main__":
+
+    exam_data = {
+        'exam_name': 'AI Laboratory',
+        'room_no': 'Lab-1'
+    }
+
+    exam_sensors = ExamSensors()
+    exam_actuators = ExamActuators()
+
+    exam_agent = ExamInvigilatorAgent(exam_data)
+
+    exam_agent.sensors = exam_sensors
+    exam_agent.actuators = exam_actuators
+
+    exam_agent.monitor_exam()
+
 ```
-<h3>OUTPUT</h3>
-<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/20a21bbd-16f1-493b-8df6-140359d813f8" />
+## OUTPUT
+<img width="596" height="761" alt="image" src="https://github.com/user-attachments/assets/c0f4d2e2-b77a-489a-8f62-fe4630e85de7" />
 
-<h3>RESULT</h3>
+
+## RESULT:
 
 Thus the Developing AI Agent with PEAS Description was implemented using python programming.
